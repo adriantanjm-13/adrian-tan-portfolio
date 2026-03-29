@@ -1,0 +1,17 @@
+{
+  "name": "adrian-tan-portfolio",
+  "version": "1.0.0",
+  "description": "Adrian Tan's UX Design Portfolio",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": ["astro", "portfolio", "design"],
+  "author": "Adrian Tan",
+  "license": "MIT",
+  "dependencies": {
+    "astro": "^4.0.0"
+  }
+}

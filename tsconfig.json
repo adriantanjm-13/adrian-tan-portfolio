@@ -1,0 +1,6 @@
+{
+  "extends": "astro/configs/strict",
+  "compilerOptions": {
+    "jsxImportSource": "astro"
+  }
+}

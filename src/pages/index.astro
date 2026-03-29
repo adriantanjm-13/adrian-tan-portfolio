@@ -1,0 +1,122 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+// Read markdown files from content directory
+const contentDir = path.join(process.cwd(), 'content');
+const files = fs.readdirSync(contentDir).filter(file => file.endsWith('.md') && file !== 'index.md');
+
+// Extract case study metadata
+const caseStudies = files.map(file => {
+  const filePath = path.join(contentDir, file);
+  const content = fs.readFileSync(filePath, 'utf-8');
+
+  // Extract title (first # heading)
+  const titleMatch = content.match(/^#\s+(.+)$/m);
+  const title = titleMatch ? titleMatch[1] : file.replace('.md', '');
+
+  // Extract first paragraph as description
+  const descMatch = content.match(/^###\s+(.+)[\s\S]*?\n\n([\s\S]+?)\n\n/m);
+  const description = descMatch ? descMatch[2].substring(0, 150) + '...' : '';
+
+  // Create slug from filename
+  const slug = file.replace('.md', '');
+
+  return {
+    title,
+    description,
+    slug,
+    file
+  };
+}).sort((a, b) => {
+  // Order: Wash Tracking, Mercury, Cryptio, Redgate
+  const order = ['improving-wash-tracking', 'building-mercury', 'revamping-chart', 'query-plan'];
+  const aIndex = order.findIndex(o => a.slug.includes(o));
+  const bIndex = order.findIndex(o => b.slug.includes(o));
+  return aIndex - bIndex;
+});
+---
+
+<Layout title="Adrian Tan - Portfolio">
+  <section class="hero">
+    <h2>Case Studies</h2>
+    <p>A collection of product design projects where I focused on high-impact storytelling, user research, and thoughtful design decisions.</p>
+  </section>
+
+  <div class="grid">
+    {caseStudies.map((study) => (
+      <a href={`/${study.slug}/`} class="card">
+        <h3>{study.title}</h3>
+        <p>{study.description}</p>
+        <span class="read-more">Read Case Study →</span>
+      </a>
+    ))}
+  </div>
+
+  <section class="about">
+    <h2>About This Portfolio</h2>
+    <p>
+      These case studies showcase my approach to product design: starting with deep user research,
+      identifying the real problems, and iterating based on feedback. Each project demonstrates
+      how I balance strategy, user needs, and business goals to deliver meaningful solutions.
+    </p>
+    <p>
+      I believe great design comes from listening—to users, to stakeholders, and to data.
+      Every decision is grounded in evidence and every interface is built with empathy.
+    </p>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #d4af37;
+  }
+
+  .hero h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 600px;
+  }
+
+  .card {
+    display: block;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    color: #2d5016;
+  }
+
+  .read-more {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #d4af37;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .about {
+    margin-top: 4rem;
+    padding: 2rem;
+    background: rgba(45, 80, 22, 0.05);
+    border-left: 4px solid #2d5016;
+  }
+
+  .about h2 {
+    margin-top: 0;
+  }
+
+  .about p {
+    max-width: 800px;
+  }
+</style>

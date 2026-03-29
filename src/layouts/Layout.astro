@@ -1,0 +1,242 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "Adrian Tan", description = "Product Design Portfolio" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- Google Fonts: Prata for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Prata&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <style is:global>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        /* Art Deco Colors */
+        --deep-spruce: #2d5016;
+        --light-spruce: #3d6b1f;
+        --cream: #f5f3f0;
+        --gold: #d4af37;
+        --black: #1a1a1a;
+
+        /* Fonts */
+        --font-heading: 'Prata', serif;
+        --font-body: 'Inter', sans-serif;
+
+        /* Spacing */
+        --spacing-xs: 0.5rem;
+        --spacing-sm: 1rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 3rem;
+        --spacing-2xl: 4rem;
+      }
+
+      html {
+        font-family: var(--font-body);
+        background-color: var(--cream);
+        color: var(--black);
+        line-height: 1.6;
+      }
+
+      body {
+        background: linear-gradient(135deg, var(--cream) 0%, #f9f7f4 100%);
+        min-height: 100vh;
+      }
+
+      /* Typography */
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        color: var(--deep-spruce);
+      }
+
+      h1 {
+        font-size: 3.5rem;
+        margin-bottom: var(--spacing-lg);
+        border-bottom: 3px solid var(--gold);
+        padding-bottom: var(--spacing-md);
+        text-transform: uppercase;
+      }
+
+      h2 {
+        font-size: 2.5rem;
+        margin: var(--spacing-2xl) 0 var(--spacing-lg) 0;
+        border-left: 4px solid var(--deep-spruce);
+        padding-left: var(--spacing-md);
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+      }
+
+      p {
+        margin-bottom: var(--spacing-md);
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      a {
+        color: var(--deep-spruce);
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.3s ease;
+      }
+
+      a:hover {
+        border-bottom-color: var(--gold);
+      }
+
+      /* Header Styling */
+      header {
+        background: var(--deep-spruce);
+        color: var(--cream);
+        padding: var(--spacing-2xl) var(--spacing-xl);
+        border-bottom: 4px solid var(--gold);
+        position: relative;
+      }
+
+      header::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gold) 0%, transparent 50%, var(--gold) 100%);
+      }
+
+      header h1 {
+        color: var(--cream);
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: var(--spacing-sm);
+        font-size: 2.5rem;
+      }
+
+      header p {
+        color: var(--gold);
+        font-size: 1.1rem;
+        letter-spacing: 0.1em;
+        margin: 0;
+      }
+
+      /* Main Container */
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--spacing-2xl) var(--spacing-xl);
+      }
+
+      /* Footer */
+      footer {
+        background: var(--deep-spruce);
+        color: var(--cream);
+        text-align: center;
+        padding: var(--spacing-xl);
+        margin-top: var(--spacing-2xl);
+        border-top: 4px solid var(--gold);
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+      }
+
+      /* Card Styling */
+      .card {
+        background: white;
+        border: 1px solid #e0dbd6;
+        border-left: 4px solid var(--deep-spruce);
+        padding: var(--spacing-lg);
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 4px;
+        background: var(--gold);
+        transition: width 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(45, 80, 22, 0.1);
+      }
+
+      .card:hover::before {
+        width: 100%;
+      }
+
+      .card h3 {
+        margin-top: 0;
+        font-size: 1.3rem;
+      }
+
+      /* Grid Layout */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--spacing-lg);
+        margin: var(--spacing-xl) 0;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        h2 {
+          font-size: 1.75rem;
+        }
+
+        header {
+          padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        main {
+          padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Adrian Tan</h1>
+      <p>Product Design | Interaction Design | Design Systems</p>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Adrian Tan. All case studies and designs are original work.</p>
+    </footer>
+  </body>
+</html>

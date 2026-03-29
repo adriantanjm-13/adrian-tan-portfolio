@@ -1,0 +1,98 @@
+---
+import Layout from '../layouts/Layout.astro';
+import fs from 'fs';
+import path from 'path';
+
+// Get all possible slugs
+export function getStaticPaths() {
+  const contentDir = path.join(process.cwd(), 'content');
+  const files = fs.readdirSync(contentDir).filter(file => file.endsWith('.md') && file !== 'index.md');
+
+  return files.map(file => ({
+    params: { slug: file.replace('.md', '') },
+    props: { file }
+  }));
+}
+
+const { file } = Astro.props;
+const { slug } = Astro.params;
+const contentDir = path.join(process.cwd(), 'content');
+const filePath = path.join(contentDir, file);
+const content = fs.readFileSync(filePath, 'utf-8');
+
+// Extract title
+const titleMatch = content.match(/^#\s+(.+)$/m);
+const title = titleMatch ? titleMatch[1] : slug;
+
+// Parse markdown to HTML (simple approach)
+const htmlContent = content
+  .replace(/^#\s+(.+)$/gm, '<h1>$1</h1>')
+  .replace(/^###\s+(.+)$/gm, '<h3>$1</h3>')
+  .replace(/^\*\*(.+?)\*\*\n/gm, '<strong>$1</strong>')
+  .replace(/\n\n/g, '</p><p>')
+  .replace(/^/gm, '<p>')
+  .replace(/$/gm, '</p>');
+---
+
+<Layout title={title}>
+  <article class="case-study">
+    <div class="case-study-content">
+      <Fragment set:html={htmlContent} />
+    </div>
+
+    <nav class="case-study-nav">
+      <a href="/" class="back-link">← Back to Portfolio</a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .case-study {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .case-study-content {
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .case-study-content :global(h1) {
+    font-size: 2.5rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+
+  .case-study-content :global(h3) {
+    font-size: 1.3rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .case-study-content :global(p) {
+    margin-bottom: 1.2rem;
+    font-size: 1rem;
+  }
+
+  .case-study-content :global(strong) {
+    color: #2d5016;
+    font-weight: 600;
+  }
+
+  .case-study-nav {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid #d4af37;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: #2d5016;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .back-link:hover {
+    transform: translateX(-4px);
+  }
+</style>
